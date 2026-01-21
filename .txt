@@ -1,0 +1,121 @@
+Project: LMS (Learning Management System)
+Pengguna: siswa dan Guru
+Tujuan:
+Mengelola data kursus dan mengaksesnya 
+Mengelola data materi dan mengaksesnya 
+
+
+User bisa melakukan:
+1. user: Siswa 
+    1. Mengakses kursus 
+    2. Join kursus 
+    3. Mengakses materi kursus 
+
+2. User: Guru 
+    1. Mengakses kursus
+    2. Membuat dan menghapus kursus 
+    3. Membuat dan menghapus materi 
+
+Alur kerja:
+1. User: Siswa
+    1. User login atau register terlebih dahulu 
+    2. User mengakses kursus 
+    3. User mengajukan untuk masuk kursus 
+    4. User melihat materi yang ada pada kursus 
+    5. User melihat kursus yang diikuti 
+    6. User keluar dari kursus
+
+2. User: Guru 
+    1. User login atau register terlebih dahulu 
+    2. User membuat kursus 
+    3. User menambahkan materi ke dalam kursus yang sudah dibuat nya
+    4. User bisa menghapus kursus atau materi yang sudah dibuat olehnya 
+
+
+Strukture Database 
+
+users
+{
+    id: PK
+    username: varchar(25),
+    password: varchar(255), hashed
+    role: emul (teacher, student)
+}
+
+course 
+{
+    id: PK 
+    title: varchar(255)
+    teacher_id: FK (users)
+    description: text
+    release_date: date
+}
+
+enrollment
+{
+    id: PK 
+    student_id: FK (users)
+    course_id: FK (course)
+    date_entry: date 
+}
+
+material
+{
+    id: PK 
+    course_id: FK (course)
+    description: text
+}
+
+
+ENDPOINT
+POST /auth/login 
+
+POST /auth/register 
+
+GET /course/{id} <-- melihat informasi course, seperti teacher dan deskrisi
+
+GET /course/{id}/material <-- melihat informasi materi kursus
+
+GET /course <-- role siswa, melihat kursus yang di ikuti
+
+GET /course/{id}/leave <-- keluar kursus
+
+GET /course/{id}/delete <-- role guru, menghapus kursus
+
+POST /course/{id}/material <-- role guru, menambahkan materi
+
+POST /course <-- role guru, membuat course
+
+POST /course/{id}/enrollment <-- role user, mengajukan untuk masuk course
+
+Strukture Folder 
+
+app/
+    config.py 
+    __init__.py
+    utils/
+        db.py
+        security.py 
+    blueprint/
+        auth/
+            route.py 
+            service.py 
+            models.py 
+            __init__.py 
+        material/
+            routes.py 
+            service.py 
+            models.py
+            __init__.py 
+        enrollment/
+            routes.py 
+            service.py 
+            models.py 
+            __init__.py 
+        course/
+            routes.py 
+            service.py 
+            models.py 
+            __init__.py 
+run.py 
+.env
