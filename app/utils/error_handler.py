@@ -1,5 +1,6 @@
 from functools import wraps
 from flask import current_app, jsonify 
+from pydantic import ValidationError
 import traceback
 
 def safe_route(func):
@@ -7,6 +8,12 @@ def safe_route(func):
     def wrapper(*args,**kwargs):
         try:
             return func(*args, **kwargs)
+        except ValidationError as e:
+            return jsonify({
+                'status':'error',
+                'messsage':str(e.errors()[0]["msg"])
+            }), 400
+
         except ValueError as e:
             return jsonify({
                 'status':'error',

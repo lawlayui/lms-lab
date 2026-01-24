@@ -4,9 +4,9 @@ from flask import current_app, g
 def get_db():
     if 'db' not in g:
         g.db = mysql.connector.connect(
-            host=current_app.config['SECRET_KEY'],
+            host=current_app.config['DB_HOST'],
             user=current_app.config['DB_USER'],
-            password=current_app.config['DB_PASSWORD'],
+            password=current_app.config['DB_PWD'],
             database=current_app.config['DB_NAME']
         )
     return g.db 

@@ -3,7 +3,7 @@ from pydantic import BaseModel, field_validator
 class Validatior(BaseModel):
     username: str 
     password: str 
-
+    role: str
     @field_validator('username')
     def username(cls,v):
         if len(v) > 25 or len(v) < 5:
@@ -16,12 +16,19 @@ class Validatior(BaseModel):
             raise ValueError("Password must be at least 8 characters and a maximum of 40 characters")
         return v 
     
+    @field_validator('role')
+    def role(cls,v):
+        if v != 'student' or v != 'teacher':
+            raise ValueError("Role not registered")
+        return v
+    
 def validation_forms(data:dict):
     username = None 
     password = None 
     try: 
         username = data['username']
         password = data['password']
+        role = data['role']
     except:
         raise ValueError("Key not found")
     

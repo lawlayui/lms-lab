@@ -10,20 +10,19 @@ def generate_hash(password: str):
 def verify_hash(password: str, password_hash: str):
     result = check_password_hash(password_hash,password)
     if result:
-        return {
-            'status':'succes'
-        }
+        return True
+            
     raise ValueError("Invalid password")
 
-def generate_jwt(value: dict):
+def generate_jwt(data: dict):
     payload = {
         'exp':datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(weeks=52),
         'iat':datetime.datetime.now(datetime.timezone.utc),
-        'value': value
+        'data': data
     }
     token = jwt.encode(payload,current_app.config['SECRET_KEY'],algorithm='HS256')
-    return token 
+    return token.decode("utf-8")
 
-def verify_hash(token: str):
+def verify_token(token: str):
     result = jwt.decode(token,current_app.config['SECRET_KEY'],algorithms=['HS256'])
     return result 

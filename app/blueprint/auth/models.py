@@ -1,18 +1,19 @@
 from flask import g 
 from app.utils.db import get_db
-from app.utils.security import generate_hash
 
-def read_user(user_id: int, username: str):
+def read_user(user_id: int=None, username: str = None, role: str = None):
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    cursor.execute('select * from users where id = %s, username = %s',(user_id, username.strip()))
-    data = cursor.fetchone
+    cursor.execute('select * from users where id = %s or username = %s',(user_id, username))
+    data = cursor.fetchone()
+    cursor.close()
     return data
 
-def create_user(username, password):
+def create_user(username: str, password: str, role: str):
     db = get_db()
     cursor = db.cursor(dictionary=True)
-    username = username.strip()
-    password = generate_hash(password.strip())
-    cursor.execute('insert into users(username, password) values(%s, %s)',(username, password))
-    return 
+    cursor.execute('insert into users(username, password, role) values(%s, %s, %s)',(username, password, role))
+    user_id = cursor.lastrowid
+    db.commit()
+    cursor.close()
+    return user_id
