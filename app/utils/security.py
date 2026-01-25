@@ -24,5 +24,10 @@ def generate_jwt(data: dict):
     return token.decode("utf-8")
 
 def verify_token(token: str):
-    result = jwt.decode(token,current_app.config['SECRET_KEY'],algorithms=['HS256'])
-    return result 
+    try:
+        result = jwt.decode(token,current_app.config['SECRET_KEY'],algorithms=['HS256'])
+        return result 
+    except jwt.ExpiredSignatureError:
+        raise ValueError("Token has expired")
+    except jwt.InvalidTokenError:
+        raise ValueError("Invalid Token")

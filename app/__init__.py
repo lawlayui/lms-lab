@@ -43,7 +43,6 @@ def create_app():
         if target not in free_route:
             if auth_header:
                 token = auth_header.split(" ")[-1]
-                print(token)
                 verify_token(token)
                 return None
             raise ValueError("Missing token")

@@ -7,6 +7,9 @@ def user_register(username: str, password: str, role: str):
     password = generate_hash(password)
     role = role.strip()
 
+    if read_user(username=username):
+        raise ValueError("Account already registered")
+
     user_id = create_user(username,password,role)
     role = read_user(user_id)['role']
     data = {'user_id':user_id,'role':role}
