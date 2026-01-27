@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, g
 from .config import Config
 from .utils.db import close_db
 from .blueprint import register_all_blueprint
@@ -43,7 +43,8 @@ def create_app():
         if target not in free_route:
             if auth_header:
                 token = auth_header.split(" ")[-1]
-                verify_token(token)
+                data = verify_token(token)['data']
+                g.dataUser = data
                 return None
             raise ValueError("Missing token")
         
