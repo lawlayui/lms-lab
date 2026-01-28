@@ -28,3 +28,19 @@ def create_course_db(title: str, teacher_id: int, description: str, release_date
     db.commit()
     cursor.close()
     return course_id
+
+
+def delete_course_db(id: int):
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute('delete from course where id = %s', (id,))
+    db.commit()
+    cursor.close()
+
+
+def leave_course_db(id: int):
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute('delete form enrollment where course_id = %s', (id,))
+    db.commit()
+    cursor.close()
